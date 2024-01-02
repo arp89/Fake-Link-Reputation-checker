@@ -1,0 +1,194 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Link Detector</title>
+    <style>
+        body {
+            background-image: url('https://unsplash.com/photos/a-black-and-white-cat-laying-on-top-of-a-white-wall-0tgMnMIYQ9Y');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            background-color: #2f43b4;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 40%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .info {
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fake Link Detector</h1>
+    <form id="link-form">
+        <label for="url">Enter a URL:</label>
+        <input type="text" id="url" name="url" required>
+        <button type="button" id="detect-button">Detect Fake Link</button>
+    </form>
+    <div id="result"></div>
+    <div id="result1"></div>
+    <div class="carousel">
+        <img src="https://source.unsplash.com/400x400/?cyber,security" alt="Image 1">
+        <img src="https://source.unsplash.com/400x400/?hacker,threat" alt="Image 2">
+        <img src="https://source.unsplash.com/400x400/?darkweb,threat" alt="Image 3">
+    </div>
+
+
+    <script>
+
+
+        const linkForm = document.getElementById('link-form');
+        const detectButton = document.getElementById('detect-button');
+        const resultDiv = document.getElementById('result');
+
+        detectButton.addEventListener('click', function () {
+            getJSON("https://domain-reputation.whoisxmlapi.com/api/v2?apiKey=at_4JYgEoXyhiyGB8Vla9s1cWwK82iDi&domainName=" + document.getElementById('url').value,
+            function(err, data) {
+            if (err !== null) {
+                alert('Something wrong with URL: ' + err);
+            } else {
+                resultDiv.textContent = 'Your reputation score is: ' + data.reputationScore;
+                alert('Your query count: ' + data.query.count);
+            }
+            });
+            
+                
+        });
+ 
+        var getJSON = function(url, callback) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+                xhr.responseType = 'json';
+                xhr.timeout = 10000;
+                xhr.onload = function() {
+                var status = xhr.status;
+                if (status === 200) {
+                        callback(null, xhr.response);
+                    } else {
+                        callback(status, xhr.response);
+                    }
+                };
+                xhr.onerror = function() {
+                    resultDiv.textContent = "error";
+                };
+                xhr.onabort = function() {
+                    resultDiv.textContent = "aborted";
+                };
+                xhr.ontimeout = function() {
+                    resultDiv.textContent = "timed out";
+                };
+                xhr.onreadystatechange = function() {
+                    
+                    
+                    if (xhr.readyState == 4 && xhr.status == 200) { 
+
+                   
+                    var jsonData = JSON.parse(xhr.responseText);
+                    resultDiv.textContent = jsonData.reputationScore;
+                    
+                    
+                    }
+                };
+                xhr.send();
+            };
+
+    </script>
+</body>
+</html>
+ 
+ 
+ 
+
+ 
+ 
